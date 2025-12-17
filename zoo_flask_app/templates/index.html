@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zoo Animal Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-content">
+        <h1>ZOO ANIMAL CLASSIFICATION</h1>
+        <p>
+            Identify the animal category using biological and behavioral
+            characteristics with Machine Learning.
+        </p>
+        <button id="startBtn">Start Predicting Class</button>
+    </div>
+</div>
+
+<!-- FORM MODAL -->
+<div class="modal" id="formModal">
+    <div class="modal-content themed">
+        <span class="close" onclick="closeForm()">×</span>
+
+        <h2>Animal Characteristics Input</h2>
+
+        <div class="info-box">
+            <h4>How to Give Input</h4>
+            <ul>
+                <li>Toggle <b>ON</b> if the animal has the feature</li>
+                <li>Toggle <b>OFF</b> if the feature is not present</li>
+                <li>Default OFF means value = 0</li>
+            </ul>
+        </div>
+
+        <form method="POST" action="/predict">
+            <div class="grid">
+
+                {% set fields = [
+                ('hair','Hair','Animal has hair'),
+                ('feathers','Feathers','Animal has feathers'),
+                ('eggs','Eggs','Lays eggs'),
+                ('milk','Milk','Produces milk'),
+                ('airborne','Airborne','Can fly'),
+                ('aquatic','Aquatic','Lives in water'),
+                ('predator','Predator','Hunts other animals'),
+                ('toothed','Teeth','Has teeth'),
+                ('backbone','Backbone','Has backbone'),
+                ('breathes','Breathes','Breathes air'),
+                ('venomous','Venomous','Is poisonous'),
+                ('fins','Fins','Has fins'),
+                ('tail','Tail','Has tail'),
+                ('domestic','Domestic','Lives with humans'),
+                ('catsize','Cat Size','Size similar to cat')
+                ] %}
+
+                {% for name,label,desc in fields %}
+                <div class="toggle-card">
+                    <h5>{{ label }}</h5>
+                    <p>{{ desc }}</p>
+                    <label class="switch">
+                        <input type="checkbox" name="{{ name }}" value="1">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <button type="submit" class="submit-btn">Predict Animal Class</button>
+        </form>
+    </div>
+</div>
+
+<!-- RESULT MODAL -->
+{% if popup_message %}
+<div class="modal show">
+    <div class="modal-content result themed">
+        <h2>Prediction Result</h2>
+        <p>{{ popup_message }}</p>
+        <button onclick="window.location.href='/'">Try Another Prediction</button>
+    </div>
+</div>
+{% endif %}
+
+<script>
+const startBtn = document.getElementById("startBtn");
+const formModal = document.getElementById("formModal");
+
+startBtn.onclick = () => formModal.classList.add("show");
+function closeForm(){ formModal.classList.remove("show"); }
+</script>
+
+</body>
+</html>
